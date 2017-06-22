@@ -1,0 +1,39 @@
+<ion-view class="homeView" view-title="<i class='icon ion-chatbubble user-messages-top-icon'></i><div class='msg-header-username'>Quiz</div>">
+	<!-- <div class="loader-center" ng-if="!doneLoading">
+		<div class="loader">
+			<i class="icon ion-load-c"></i>
+		</div>
+	</div> -->
+	<ion-content overflow-scroll="false" has-bouncing="true" class="has-header has-footer" delegate-handle="userMessageScroll">
+		<ion-grid>
+			<ion-list>
+		  <ion-row class="q-padding" ng-repeat="quiz in quizs track by $index">
+		    <ion-col>
+					  <ion-item id="quiz{{$index}}" class="quiz-wrapper" ng-class="quiz.result? 'q-fade':'q-active slide-in-bottom'" >
+							<h4>{{quiz.title}} #{{$index+1}}</h4>
+								<div class="quizs-btn-wrapper">
+									<div class="quiz-btn" ng-repeat="option in quiz.quaestions track by $index">
+										<button class="btn-q" ng-click="setOption(quizs.indexOf(quiz),option);quiz.quaestions[$index].selected=true">
+											<span class="btn-name">{{optlabel[$index]}}</span>
+											{{option.title}}
+										<span class="q-chechmark scale-in-bl" ng-if="option.selected">
+											<i class=" icon ion-checkmark-round"></i>
+										</span>
+										</button>
+									</div>
+								</div>
+							</ion-item>
+
+					</ion-col>
+				<ion-row>
+					</ion-list>
+			<ion-grid>
+
+	</ion-content>
+
+	<ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
+		<button type="button"><i class="ion-chevron-down"></i></button>
+		<button type="button"><i class="ion-chevron-up"></i></button>
+	</ion-footer-bar>
+	</form>
+</ion-view>
