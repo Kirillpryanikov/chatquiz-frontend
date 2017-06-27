@@ -1,7 +1,7 @@
-<ion-view view-title="Login" name="login-view" ng-controller="LoginCtrl">
+<ion-view view-title="Login" name="login-view">
   <ion-content class="padding">
       <div class="list list-inset">
-        <form class="" method="post" name="loginForm" novalidate>
+        <form class="login-form" method="post" name="loginForm" novalidate>
           <label class="item item-input">
               <input type="email" name="email" placeholder="email" ng-model="data.email"
               ng-class="{ 'has-error' : loginForm.email.$invalid && !loginForm.email.$pristine }" required>
@@ -12,6 +12,6 @@
           </label>
         </form>
       </div>
-      <button class="button button-block button-calm" ng-click="login(loginForm)">Sign In</button>
+      <button class="button button-block button-calm login-btn" ng-click="login(loginForm,data)">Sign In</button>
   </ion-content>
 </ion-view>

@@ -1,11 +1,23 @@
+// .view-container .has-header {
+//   max-width: 1000px;
+//   margin: 0 auto;
+// }
+.login-form,
+.login-btn {
+  max-width: 700px;
+  margin: auto;
+}
 .homeView{
     /* allows the bar-footer to be elastic /*
     /* optionally set a max-height */
     /* maxlength on the textarea will prevent /*
     /* it from getting too large also */
+
     .bar-footer {
       overflow: visible !important;
       height: 70px;
+      display: flex;
+      justify-content: center;
     }
 
     /* fixes an ios bug bear */
@@ -158,22 +170,48 @@
     text-decoration: none;
     }
     .quiz-btn {
-      display: inline-block;
+      float: left;
+    }
+    .submited {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .submited .icon {
+      font-size: 7em;
+      padding: 0px 0.15em;
+      color: #FFF;
+      margin-bottom: 0.1em;
+      background-color: #444444;
+      display: block;
+    }
+    .submited div {
+      font-size: 1.5em;
+      margin-bottom: 15px;
     }
 
     .btn-q {
+      float: left;
+      white-space: normal;
       background: none;
       padding: 0.5em 1.1em;
       margin: 5px;
-      border-radius: 2px;
+      border-radius: 4px;
       -webkit-border-radius: 4px;
-      -moz-border-radius: 2px;
+      -moz-border-radius: 4px;
       box-shadow: none;
       border-image: none;
       border: 2px solid #50a4ac;
       text-align: left;
       color: #5caaba;
       font-size: 1.2em;
+        .picked {
+          color: #dbecee;
+        }
       }
     .btn-name {
       color: #5caaba;
@@ -191,7 +229,8 @@
       font-size: 0.9em;
     }
 
-    .btn-q:hover {
+    .btn-q:hover
+     {
       background:  #dbecee;
 
       .btn-name {
@@ -211,14 +250,15 @@
       display: inline-block;
     }
     .q-fade {
-      opacity: 0.2;
+      opacity: 0.5;
       //color: #d7d6d8;
     }
     .q-fade .btn-name {
-
+      background: #4fa3a9;
+      color: #fff;
     }
     .message-footer button {
-      float: right;
+
       display: inline-block;
       background: #49a3ab;
       border: 0px;
@@ -233,11 +273,64 @@
     	-webkit-animation: scale-in-bl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
     	        animation: scale-in-bl 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
     }
-    @media only screen  and (max-width: 650px) {
-      .quiz-btn {
-        display: block;
+    .q-progress {
+      display: inline-block;
+      list-style: none;
+    }
+    .q-progress {
+      display: inline-block;
+      list-style: none;
+      border-radius: 4px;
+    }
+    .q-progress li {
+      display: inline-block;
+      height: 4px;
+      background: #c0dcdf;
+      width: 3em;
+    }
+    .q-pagin {
+
+    }
+    .submit .btn-q,
+    .submited .btn-q {
+      color: #fff;
+      background-color: #50a4ac;
+      font-weight: bolder;
+    }
+    .submit .btn-q:hover,
+    .submited .btn-q:hover {
+      opacity: 0.7;
+    }
+    .scale-in-center {
+    	-webkit-animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
+    	        animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s both;
+    }
+
+    @-webkit-keyframes scale-in-center {
+      0% {
+        -webkit-transform: scale(0);
+                transform: scale(0);
+        opacity: 1;
+      }
+      100% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        opacity: 1;
       }
     }
+    @keyframes scale-in-center {
+      0% {
+        -webkit-transform: scale(0);
+                transform: scale(0);
+        opacity: 1;
+      }
+      100% {
+        -webkit-transform: scale(1);
+                transform: scale(1);
+        opacity: 1;
+      }
+    }
+
 
     @-webkit-keyframes scale-in-bl {
     0% {

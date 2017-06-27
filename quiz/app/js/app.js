@@ -3,21 +3,13 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'App' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'monospaced.elastic', 'angularMoment'])
+angular.module('App', ['ionic', 'ngAnimate', 'monospaced.elastic', 'angularMoment'])
 
 .run(['$ionicPlatform',
-      function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      function($ionicPlatform, $httpProvider,StorageService) {
 
-      // Don't remove this line unless you know what you are doing. It stops the viewport
-      // from snapping when text inputs are focused. Ionic handles this internally for
-      // a much nicer keyboard experience.
-      cordova.plugins.Keyboard.disableScroll(true);
-    }
+  $ionicPlatform.ready(function() {
+
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
@@ -27,20 +19,55 @@ angular.module('App', ['ionic', 'ngCordova', 'ngAnimate', 'monospaced.elastic', 
          '$urlRouterProvider',
          '$ionicConfigProvider',
          '$compileProvider',
-         function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $compileProvider) {
-
-    $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob|content|ms-appx|x-wmapp0):|data:image\/|img\//);
-    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|ghttps?|ms-appx|x-wmapp0):/);
-
-    $ionicConfigProvider.scrolling.jsScrolling(ionic.Platform.isIOS());
-
+         '$httpProvider',
+         function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $compileProvider, $httpProvider) {
+          $ionicConfigProvider.scrolling.jsScrolling(ionic.Platform.platform() != 'win32' && ionic.Platform.platform() != "linux" && ionic.Platform.platform() != "macintel");
+          $httpProvider.interceptors.push('AuthInterceptor');
     $stateProvider
         .state('quiz', {
             url: "/quiz",
             cache: false,
             templateUrl: "templates/quiz.html",
-            controller: 'QuizController'
+            controller: 'QuizController',
+            resolve: {
+              userData: ['StorageService', '$location', function (StorageService, $location) {
+                var user = StorageService.getAuthData();
+                if(user.token) {
+                  return user;
+                } else {
+                  $location.path('login');
+                }
+              }]
+            }
+        })
+        .state('login', {
+            url: "/login",
+            cache: false,
+            templateUrl: "templates/login.html",
+            controller: 'LoginCtrl',
+            resolve: {
+              userData: ['StorageService', function (StorageService) {
+                return StorageService.getAuthData()
+              }]
+            }
         });
 
-        $urlRouterProvider.otherwise('/quiz');
-}]);
+        $urlRouterProvider.otherwise('quiz');
+}])
+.factory('AuthInterceptor', function(StorageService,$q) {
+  return {
+    request: function(config) {
+      var data = StorageService.getAuthData();
+      //  console.log(data);
+
+      config.headers['X-App-Key'] = '1234567890';
+      config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+
+      if(data.hasOwnProperty('token')) {
+        config.headers['X-Auth-Token'] = data.token;
+      }
+
+      return config;
+    }
+  }
+});
