@@ -37,6 +37,13 @@
 
             return JSON.parse($window.localStorage['_user'] || '{}');
           }
+          me.setRoom = function (value) {
+            $window.localStorage['_room'] = JSON.stringify(value);
+          }
+          me.getRoom = function() {
+
+            return JSON.parse($window.localStorage['_room'] || '{}');
+          }
 
           return me;
         };

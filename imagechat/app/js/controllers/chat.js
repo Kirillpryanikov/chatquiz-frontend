@@ -45,12 +45,13 @@
 				message:false
 			};
 			$scope.login = function(form,data){
+				var room = $stateParams.list? $stateParams.list : StorageService.getRoom();
 				if(form.$valid) {
 				 ChatService.login(data)
 					.then(function(resp) {
 						console.log(resp);
 							StorageService.setAuthData(resp.data);
-							$state.go('chat');
+								$state.go('chat',{list:room});
 					})
 					.catch(function(resp){
 					 console.log(resp);
@@ -71,15 +72,15 @@
 	ChatController.$inject = ['$scope', '$rootScope', '$state',
   '$stateParams', 'ChatService',
   '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval',
-  '$ionicActionSheet', '$filter', '$ionicModal','SockService','userData'];
+  '$ionicActionSheet', '$filter', '$ionicModal','SockService','userData','StorageService'];
 	function ChatController($scope, $rootScope, $state, $stateParams, ChatService,
     $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter,
-		 $ionicModal,SockService,userData)
+		 $ionicModal,SockService,userData,StorageService)
 		{
 
-				var room=$stateParams.list;
+				var room = $stateParams.list? $stateParams.list : StorageService.getRoom();
 				var msgSocket = SockService.connect();
-				console.log(msgSocket);
+				console.log('room in ctrl',room);
 				if(!$scope.messages || $scope.messages === undefined) {
 					$scope.messages = [];
 					$scope.doneLoading = true;
@@ -117,7 +118,7 @@
 		var txtInput; // ^^^
 
 		$scope.$on('$ionicView.enter', function () {
-			getMessages();
+			//getMessages();
 
 			$timeout(function () {
 				footerBar = document.body.querySelector('.homeView .bar-footer');
@@ -149,26 +150,33 @@
 		// }
 
 		$scope.$watch('input.message', function (newValue, oldValue) {
-			console.log('input.message $watch, newValue ' + newValue);
-			if (!newValue) newValue = '';
+			//console.log('input.message $watch, newValue ' + newValue);
+			//if (!newValue) newValue = '';
 		});
 
 		var addMessage = function (message) {
+
 			msgSocket.emit('message', message);
 		};
 
 		var lastPhoto = 'img/donut.png';
 
 		$scope.sendPhoto = function (e) {
-			var file = e.files[0];
-			var reader = new FileReader();
-			reader.onload = function(evt){
 			var msg ={};
-			msg.image = evt.target.result;
-			msg.image_name = file.name;
-			msgSocket.emit('image', msg);
-		};
-		reader.readAsDataURL(file);
+			if(e && e.files && e.files.length > 0) {
+				var file = e.files[0];
+				var reader = new FileReader();
+				reader.onload = function(evt){
+
+				msg.image = evt.target.result;
+				msg.image_name = file.name;
+				msgSocket.emit('image', msg);
+			};
+			if(msg!=={}){
+				reader.readAsDataURL(file);
+			}
+			}
+
 		};
 
 		$scope.sendMessage = function (sendMessageForm) {
@@ -193,10 +201,10 @@
 
 		// this keeps the keyboard open on a device only after sending a message, it is non obtrusive
 		function keepKeyboardOpen() {
-			console.log('keepKeyboardOpen');
-			txtInput.one('blur', function () {
-				txtInput[0].focus();
-			});
+			// console.log('keepKeyboardOpen');
+			// txtInput.one('blur', function () {
+			// 	txtInput[0].focus();
+			// });
 		}
 		$scope.refreshScroll = function (scrollBottom, timeout) {
 			$timeout(function () {

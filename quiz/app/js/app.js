@@ -25,7 +25,7 @@ angular.module('App', ['ionic', 'ngAnimate', 'monospaced.elastic', 'angularMomen
 
     $stateProvider
         .state('quiz', {
-            url: "/quiz",
+            url: "/:list/quiz",
             cache: false,
             templateUrl: "templates/quiz.html",
             controller: 'QuizController',

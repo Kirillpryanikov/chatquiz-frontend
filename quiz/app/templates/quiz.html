@@ -31,7 +31,7 @@
 							<ion-item class="quiz-wrapper" style="border-bottom:0px;margin-bottom:9em">
 								<div class="quizs-btn-wrapper">
 									<div class="quiz-btn">
-										<button class="btn-q" ng-click="sabmitData()">
+										<button class="btn-q" ng-click="sabmitData()" ng-disabled="getCount() < quizs.length">
 											Submit
 										</button>
 									</div>
@@ -47,7 +47,7 @@
 	<div ng-if="submited" class="submited scale-in-center">
 		<i class="icon ion-checkmark-round"	></i>
 		<div>Thanks for compliting</div>
-		<button class="btn-q">Go back</button>
+		<!-- <button class="btn-q">Go back</button> -->
 	</div>
 	<ion-footer-bar class="bar-stable item-input-inset message-footer" keyboard-attach>
 		<span></span>

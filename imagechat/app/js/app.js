@@ -42,11 +42,16 @@ angular.module('App', ['ionic', 'btford.socket-io', 'ngAnimate', 'monospaced.ela
         templateUrl: "templates/chat.html",
         controller: 'ChatController',
         resolve: {
-          userData: ['StorageService', '$location', function (StorageService, $location) {
+          userData: ['StorageService', '$location', '$stateParams', function (StorageService, $location, $stateParams) {
             var user = StorageService.getAuthData();
+
             if(user.token) {
               return user;
             } else {
+              if($stateParams.list){
+                console.log('setRoom',$stateParams.list);
+                StorageService.setRoom($stateParams.list)
+              }
               $location.path('login');
             }
           }]

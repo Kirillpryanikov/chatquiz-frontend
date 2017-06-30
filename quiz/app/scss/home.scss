@@ -2,6 +2,9 @@
 //   max-width: 1000px;
 //   margin: 0 auto;
 // }
+h1,h2,h3,h4,h5,p,span,div,input, button, select, textarea {
+  font-family: 'Lato', sans-serif !important;
+}
 .login-form,
 .login-btn {
   max-width: 700px;
@@ -21,6 +24,18 @@
 }
 #logout:hover {
   text-decoration: underline;
+}
+.bar.bar-dark {
+  background-color: #9ea4af;
+  border-color: #9ea4af;
+}
+.button.button-calm {
+  background-color: #1bbc9b;
+  border-color: #1bbc9b;
+}
+.button.button-positive {
+  background-color: #1bbc9b;
+  border-color: #1bbc9b;
 }
 .homeView{
     /* allows the bar-footer to be elastic /*
@@ -201,7 +216,7 @@
       padding: 0px 0.15em;
       color: #FFF;
       margin-bottom: 0.1em;
-      background-color: #444444;
+      background-color: #9ea4af;
       display: block;
     }
     .submited div {
@@ -220,33 +235,33 @@
       -moz-border-radius: 4px;
       box-shadow: none;
       border-image: none;
-      border: 2px solid #50a4ac;
+      border: 2px solid #1bbc9b;
       text-align: left;
-      color: #5caaba;
+      color: #1bbc9b;
       font-size: 1.2em;
         .picked {
-          color: #dbecee;
+          color: #f2f2ed;
         }
       }
     .btn-name {
-      color: #5caaba;
+      color: #1bbc9b;
       padding: 1px 3px;
       border-radius: 2px;
       -webkit-border-radius: 4px;
       -moz-border-radius: 2px;
-      border: 2px solid #50a4ac;
+      border: 2px solid #1bbc9b;
       font-size: 0.8em;
       font-weight: bolder;
-      background-color: #dbecee;
+      background-color: #f2f2ed;
     }
     .quiz-btn .ion-checkmark-round {
-      color: #5caaba;
+      color: #1bbc9b;
       font-size: 0.9em;
     }
 
     .btn-q:hover
      {
-      background:  #dbecee;
+      background:  #f2f2ed;
 
       .btn-name {
           background: #4fa3a9;
@@ -303,6 +318,7 @@
       height: 7px;
       background: #c0dcdf;
       width: 5em;
+
     }
     .q-progress li:first-child {
       border-top-left-radius:7px;
@@ -318,7 +334,7 @@
     .submit .btn-q,
     .submited .btn-q {
       color: #fff;
-      background-color: #50a4ac;
+      background-color: #1bbc9b;
       font-weight: bolder;
     }
     .submit .btn-q:hover,

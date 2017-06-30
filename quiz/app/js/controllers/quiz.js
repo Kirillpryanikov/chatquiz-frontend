@@ -81,7 +81,7 @@
      $ionicScrollDelegate.anchorScroll(true);
 	 	}
 
-		var listId = '59524e93ccc3966a048a8c9c';
+		var listId =  $stateParams.list;
 		$scope.optlabel = ["A","B","C","D","G","E"];
 
 		var init = function() {
@@ -100,7 +100,7 @@
 		}
 		$scope.setQuiz = function(index,option) {
 
-			if($scope.quizs[index].multipleSelect === true) {
+			if($scope.quizs[index].multiselect === true) {
 				$scope.quizs[index].answers[option].picked =
 					($scope.quizs[index].answers[option].picked)? false : true;
 			} else {
@@ -116,12 +116,12 @@
 				// }
 			}
 
-			//console.log($scope.populateData());
+			console.log($scope.populateData());
 
 			var i = $scope.getCount();
 			var els = document.getElementsByClassName('q-progress-li');
 			console.log(i);
-			els[i-1].style.background = '#50a3ab';
+			els[i-1].style.background = '#1bbc9b';
 		}
 		$scope.getCount = function () {
 			if(!$scope.quizs) return false;
