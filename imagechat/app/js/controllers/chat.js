@@ -3,71 +3,110 @@
 
 	angular
 		.module('App')
+		.controller('MainCtrl', MainCtrl)
 		.controller('LoginCtrl', LoginCtrl)
-		.controller('HomeController', HomeController);
+		.controller('ChatController', ChatController);
+	MainCtrl.$inject = ['$scope', '$rootScope', '$state',
+  '$stateParams', 'ChatService','StorageService',
+  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval',
+  '$ionicActionSheet', '$filter', '$ionicModal','$q'];
+
+	function MainCtrl($scope, $rootScope, $state, $stateParams, ChatService,StorageService,
+    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter, $ionicModal, $q, userData)
+		 {
+			 $scope.logout = function() {
+				 console.log('logOut');
+				 ChatService.logOut();
+			 }
+		}
 		// login
 	LoginCtrl.$inject = ['$scope', '$rootScope', '$state',
-  '$stateParams', 'MockService',
+  '$stateParams', 'ChatService','StorageService',
   '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval',
   '$ionicActionSheet', '$filter', '$ionicModal'];
-	function LoginCtrl($scope, $rootScope, $state, $stateParams, MockService,
-    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter, $ionicModal) {
-			console.log('LoginCtrl');
-			$scope.data = {};
-			// An alert dialog
-		 $scope.showAlert = function() {
-		   var alertPopup = $ionicPopup.alert({
-		     title: 'Invalid form data',
-		     template: 'It might taste good'
-		   });
+	function LoginCtrl($scope, $rootScope, $state, $stateParams, ChatService, StorageService,
+    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter, $ionicModal)
+		{
+		 $scope.data = {};
 
-		   alertPopup.then(function(res) {
-		     console.log('Thank you for not eating my delicious ice cream cone');
-		   });
-		 };
-		 $scope.login = function(form) {
+		 // An alert dialog
+			$scope.showAlert = function() {
+				var alertPopup = $ionicPopup.alert({
+					title: 'Oops...',
+					template: 'Invalid form data'
+				});
 
-			 if(form.$valid) {
-				 $scope.user = MockService.getMockAuth();
-				 $scope.user = $scope.user.data;
-				//  MockService.getMockAuth($scope.data)
-				//  .then(function(resp) {
-				// 	 console.log(resp);
-				//  })
-				//  .error(function(resp){
-				 //
-				//  });
-				console.log($scope.user);
-			 } else {
-			 	 $scope.showAlert();
-			 }
-		 }
+				alertPopup.then(function(res) {
+					//console.log('Thank you for not eating my delicious ice cream cone');
+				});
+			};
+			$scope.valid={
+				password:false,
+				message:false
+			};
+			$scope.login = function(form,data){
+				if(form.$valid) {
+				 ChatService.login(data)
+					.then(function(resp) {
+						console.log(resp);
+							StorageService.setAuthData(resp.data);
+							$state.go('chat');
+					})
+					.catch(function(resp){
+					 console.log(resp);
+					 if (resp.data.hasOwnProperty('password')) {
+						 $scope.valid.message = resp.data.password.notMatch;
+					 }
+					 if (resp.data.hasOwnProperty('message')) {
+						 $scope.valid.message = resp.data.message;
+					 }
+					});
+				} else {
+					$scope.showAlert();
+				}
+			}
 		}
 
 	// main chat ctrl
-	HomeController.$inject = ['$scope', '$rootScope', '$state',
-  '$stateParams', 'MockService',
+	ChatController.$inject = ['$scope', '$rootScope', '$state',
+  '$stateParams', 'ChatService',
   '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval',
-  '$ionicActionSheet', '$filter', '$ionicModal'];
-	function HomeController($scope, $rootScope, $state, $stateParams, MockService,
-    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter, $ionicModal) {
+  '$ionicActionSheet', '$filter', '$ionicModal','SockService','userData'];
+	function ChatController($scope, $rootScope, $state, $stateParams, ChatService,
+    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter,
+		 $ionicModal,SockService,userData)
+		{
 
-		// mock acquiring data via $stateParams
-		$scope.toUser = {
-			_id: '534b8e5aaa5e7afc1b23e69b',
-			pic: 'http://www.nicholls.co/images/nicholls.jpg',
-			username: 'Nicholls'
-		}
+				var room=$stateParams.list;
+				var msgSocket = SockService.connect();
+				console.log(msgSocket);
+				if(!$scope.messages || $scope.messages === undefined) {
+					$scope.messages = [];
+					$scope.doneLoading = true;
+				}
+				//
+				msgSocket.on('connect', function() {
+					msgSocket.emit('room', room);
+					msgSocket.on('message', function(resp) {
+						console.log('response!!!');
+						$scope.messages.push(resp);
+						console.log(resp);
+						$scope.$apply();
+					});
+					msgSocket.on('image', function(resp) {
+						console.log('response!!!');
+						$scope.messages.push(resp);
+						console.log('asdfasdfasdf',$scope.messages);
+						$scope.$apply();
+
+					});
+				});
 
 		// this could be on $rootScope rather than in $stateParams
-		$scope.user = {
-			_id: '534b8fb2aa5e7afc1b23e69c',
-			pic: 'http://ionicframework.com/img/docs/mcfly.jpg',
-			username: 'Marty'
-		};
-
+		$scope.user = userData;
+		// var myIoSocket = socket.connect('http://192.168.0.110:8080/123/chat/');
 		$scope.input = {
-			message: localStorage['userMessage-' + $scope.toUser._id] || ''
+			//message: localStorage['userMessage-' + $scope.toUser._id] || ''
 		};
 
 		var messageCheckTimer;
@@ -99,70 +138,42 @@
 			}
 		});
 
-		$scope.$on('$ionicView.beforeLeave', function () {
-			if (!$scope.input.message || $scope.input.message === '') {
-				localStorage.removeItem('userMessage-' + $scope.toUser._id);
-			}
-		});
+		// $scope.$on('$ionicView.beforeLeave', function () {
+		// 	if (!$scope.input.message || $scope.input.message === '') {
+		// 		//localStorage.removeItem('userMessage-' + $scope.toUser._id);
+		// 	}
+		// });
 
-		function getMessages() {
-			// the service is mock but you would probably pass the toUser's GUID here
-			MockService.getUserMessages({
-				toUserId: $scope.toUser._id
-			}).then(function (data) {
-				$scope.doneLoading = true;
-				$scope.messages = data.messages;
-			});
-		}
+		// function getMessages() {
+		//
+		// }
 
 		$scope.$watch('input.message', function (newValue, oldValue) {
 			console.log('input.message $watch, newValue ' + newValue);
 			if (!newValue) newValue = '';
-			localStorage['userMessage-' + $scope.toUser._id] = newValue;
 		});
 
 		var addMessage = function (message) {
-			message._id = new Date().getTime(); // :~)
-			message.date = new Date();
-			message.username = $scope.user.username;
-			message.userId = $scope.user._id;
-			message.pic = $scope.user.picture;
-			$scope.messages.push(message);
+			msgSocket.emit('message', message);
 		};
 
 		var lastPhoto = 'img/donut.png';
 
-		$scope.sendPhoto = function () {
-			$ionicActionSheet.show({
-				buttons: [
-					{ text: 'Take Photo' },
-					{ text: 'Photo from Library' }
-				],
-				titleText: 'Upload image',
-				cancelText: 'Cancel',
-				buttonClicked: function (index) {
-
-					var message = {
-						toId: $scope.toUser._id,
-						photo: lastPhoto
-					};
-					lastPhoto = lastPhoto === 'img/donut.png' ? 'img/woho.png' : 'img/donut.png';
-					addMessage(message);
-
-					$timeout(function () {
-						var message = MockService.getMockMessage();
-						message.date = new Date();
-						$scope.messages.push(message);
-					}, 2000);
-					return true;
-				}
-			});
+		$scope.sendPhoto = function (e) {
+			var file = e.files[0];
+			var reader = new FileReader();
+			reader.onload = function(evt){
+			var msg ={};
+			msg.image = evt.target.result;
+			msg.image_name = file.name;
+			msgSocket.emit('image', msg);
+		};
+		reader.readAsDataURL(file);
 		};
 
 		$scope.sendMessage = function (sendMessageForm) {
 			var message = {
-				toId: $scope.toUser._id,
-				text: $scope.input.message
+				message: $scope.input.message
 			};
 
 			// if you do a web service call this will be needed as well as before the viewScroll calls
@@ -170,28 +181,20 @@
 			// for some reason the one time blur event is not firing in the browser but does on devices
 			keepKeyboardOpen();
 
-			//MockService.sendMessage(message).then(function(data) {
-			$scope.input.message = '';
+			//ChatService.sendMessage(message).then(function(data) {
 
+			$scope.input.message = '';
 			addMessage(message);
 			$timeout(function () {
 				keepKeyboardOpen();
 			}, 0);
 
-			$timeout(function () {
-				var message = MockService.getMockMessage();
-				message.date = new Date();
-				$scope.messages.push(message);
-				keepKeyboardOpen();
-			}, 2000);
-			//});
 		};
 
 		// this keeps the keyboard open on a device only after sending a message, it is non obtrusive
 		function keepKeyboardOpen() {
 			console.log('keepKeyboardOpen');
 			txtInput.one('blur', function () {
-				console.log('textarea blur, focus back on it');
 				txtInput[0].focus();
 			});
 		}
@@ -228,10 +231,10 @@
 		};
 
 		$scope.photoBrowser = function (message) {
-			var messages = $filter('orderBy')($filter('filter')($scope.messages, { photo: '' }), 'date');
+			var messages = $filter('orderBy')($filter('filter')($scope.messages, { image: '' }), 'date');
 			$scope.activeSlide = messages.indexOf(message);
 			$scope.allImages = messages.map(function (message) {
-				return message.photo;
+				return message.image;
 			});
 
 			openModal('templates/modals/fullscreenImages.html');
@@ -269,15 +272,6 @@
 					return true;
 				}
 			});
-		};
-
-		// this prob seems weird here but I have reasons for this in my app, secret!
-		$scope.viewProfile = function (msg) {
-			if (msg.userId === $scope.user._id) {
-				// go to your profile
-			} else {
-				// go to other users profile
-			}
 		};
 
 		$scope.$on('elastic:resize', function (event, element, oldHeight, newHeight) {

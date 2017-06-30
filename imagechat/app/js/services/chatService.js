@@ -3,12 +3,66 @@
 
     angular
         .module('App')
-        .factory('MockService', MockService);
+        .factory('ChatService',['$http', '$q','$window','$state', ChatService])
+        .factory('StorageService', ['$window', StorageService])
+        .factory('SockService', ['StorageService','$http', '$q','$window','$state', SockService]);
 
-    MockService.$inject = ['$http', '$q'];
-    function MockService($http, $q) {
+        //socket
+        function SockService(StorageService,$window,$stateParams) {
+          var me={};
+          var apiUrl = "http://192.168.0.110:8080/";
+          var user = StorageService.getAuthData();
+          var qr = "'token="+user.token+"'";
+          var socketquery = {
+            query: "token="+ String(user.token)
+          };
+          console.log('query=',socketquery);
+
+            me.connect = function () {
+               var sock = io.connect(apiUrl, socketquery);
+
+        	     return sock;
+           }
+        //   me.disconnect = function (room) {
+        //  }
+
+          return me;
+        };
+        function StorageService($window,$stateParams) {
+          var me={};
+          me.setAuthData = function (value) {
+            $window.localStorage['_user'] = JSON.stringify(value);
+          }
+          me.getAuthData = function() {
+
+            return JSON.parse($window.localStorage['_user'] || '{}');
+          }
+
+          return me;
+        };
+
+    function ChatService($http, $q,$window,$state) {
         var me = {};
+        var apiUrl = "http://192.168.0.110:8080/";
 
+        me.logOut = function () {
+          $window.localStorage['_user'] = false;
+          $state.go('login');
+        }
+        me.login = function(data){
+          var endpoint = "auth/"
+          return $http({
+            method: 'POST',
+            url: apiUrl+endpoint,
+            data: data,
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            }
+          });
+        }
         me.getUserMessages = function (d) {
             /*
             var endpoint =

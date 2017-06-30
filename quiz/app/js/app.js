@@ -6,10 +6,8 @@
 angular.module('App', ['ionic', 'ngAnimate', 'monospaced.elastic', 'angularMoment'])
 
 .run(['$ionicPlatform',
-      function($ionicPlatform, $httpProvider,StorageService) {
-
+      function($ionicPlatform, $httpProvider) {
   $ionicPlatform.ready(function() {
-
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
@@ -23,6 +21,8 @@ angular.module('App', ['ionic', 'ngAnimate', 'monospaced.elastic', 'angularMomen
          function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $compileProvider, $httpProvider) {
           $ionicConfigProvider.scrolling.jsScrolling(ionic.Platform.platform() != 'win32' && ionic.Platform.platform() != "linux" && ionic.Platform.platform() != "macintel");
           $httpProvider.interceptors.push('AuthInterceptor');
+          $httpProvider.interceptors.push('AuthErrInterceptor');
+
     $stateProvider
         .state('quiz', {
             url: "/quiz",
@@ -54,7 +54,7 @@ angular.module('App', ['ionic', 'ngAnimate', 'monospaced.elastic', 'angularMomen
 
         $urlRouterProvider.otherwise('quiz');
 }])
-.factory('AuthInterceptor', function(StorageService,$q) {
+.factory('AuthInterceptor', function(StorageService,$q,$location) {
   return {
     request: function(config) {
       var data = StorageService.getAuthData();
@@ -65,6 +65,21 @@ angular.module('App', ['ionic', 'ngAnimate', 'monospaced.elastic', 'angularMomen
 
       if(data.hasOwnProperty('token')) {
         config.headers['X-Auth-Token'] = data.token;
+      }
+
+      return config;
+    }
+  }
+})
+.factory('AuthErrInterceptor', function(StorageService,$q,$location) {
+  return {
+    responseError: function(response) {
+      if (response.status === 401) {
+        $location.path('/login');
+        StorageService.setAuthData('');
+        return $q.reject(response);
+      } else {
+        return $q.reject(response);
       }
 
       return config;

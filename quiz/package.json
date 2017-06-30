@@ -37,6 +37,7 @@
     "android"
   ],
   "dependencies": {
+    "angular-cookies": "^1.6.4",
     "socket.io-client": "^2.0.3"
   }
 }

@@ -3,8 +3,23 @@
 
 	angular
 		.module('App')
+		.controller('MainCtrl', MainCtrl)
 		.controller('LoginCtrl', LoginCtrl)
 		.controller('QuizController', QuizController);
+		MainCtrl.$inject = ['$scope', '$rootScope', '$state',
+	  '$stateParams', 'ApiService','StorageService',
+	  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval',
+	  '$ionicActionSheet', '$filter', '$ionicModal','$q'];
+
+		function MainCtrl($scope, $rootScope, $state, $stateParams, ApiService,StorageService,
+	    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter, $ionicModal, $q, userData)
+			 {
+				 $scope.logout = function() {
+					 console.log('logOut');
+					 ApiService.logOut();
+				 }
+			}
+		// main chat ctrl
 		LoginCtrl.$inject = ['$scope', '$rootScope', '$state',
 	  '$stateParams', 'ApiService','StorageService',
 	  '$ionicPopup', '$ionicScrollDelegate', '$timeout', '$interval',
@@ -26,6 +41,10 @@
 			     //console.log('Thank you for not eating my delicious ice cream cone');
 			   });
 			 };
+			 $scope.valid={
+				 password:false,
+				 message:false
+			 };
 			 $scope.login = function(form,data) {
 				 if(form.$valid) {
 					 console.log(data);
@@ -36,7 +55,13 @@
   						 $state.go('quiz');
 					 })
 					 .catch(function(resp){
-						 console.log(resp);
+						console.log(resp);
+						if (resp.data.hasOwnProperty('password')) {
+							$scope.valid.message = resp.data.password.notMatch;
+						}
+						if (resp.data.hasOwnProperty('message')) {
+							$scope.valid.message = resp.data.message;
+						}
 					 });
 				 } else {
 				 	 $scope.showAlert();
@@ -55,6 +80,7 @@
      $location.hash('quiz'+id);
      $ionicScrollDelegate.anchorScroll(true);
 	 	}
+
 		var listId = '59524e93ccc3966a048a8c9c';
 		$scope.optlabel = ["A","B","C","D","G","E"];
 

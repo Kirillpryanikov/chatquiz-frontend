@@ -1,8 +1,7 @@
 <ion-view class="homeView" hide-back-button="true" view-title="<i class='icon ion-chatbubble user-messages-top-icon'></i><div class='msg-header-username'>Quiz</div>">
-	<!-- <div class="loader-center" ng-if="!doneLoading">
-		<div class="loader">
+		<!-- <div class="loader">
 			<i class="icon ion-load-c"></i>
-		</div>
+		</div> -->
 	</div> -->
 	<ion-content overflow-scroll="false" has-bouncing="true" class="has-header has-footer" delegate-handle="userMessageScroll">
 		<ion-grid ng-if="!submited">
@@ -56,8 +55,8 @@
 		<ul class="q-progress">
 			<li class="q-progress-li" ng-repeat="quiz in quizs track by $index" id="prog{{$index}}"></li>
 		</ul>
-		<button type="button"><i class="ion-chevron-down"></i></button>
-		<button type="button"><i class="ion-chevron-up"></i></button>
+		<!-- <button type="button"><i class="ion-chevron-down"></i></button>
+		<button type="button"><i class="ion-chevron-up"></i></button> -->
 	</ion-footer-bar>
 	</form>
 </ion-view>

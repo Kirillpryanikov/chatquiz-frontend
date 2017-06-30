@@ -7,11 +7,26 @@
   max-width: 700px;
   margin: auto;
 }
+.q-pagin {
+  margin-right: 10px;
+}
+#logout {
+  float: right;
+  z-index: 99999;
+  margin-right: 20px;
+  color: #fff;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+#logout:hover {
+  text-decoration: underline;
+}
 .homeView{
     /* allows the bar-footer to be elastic /*
     /* optionally set a max-height */
     /* maxlength on the textarea will prevent /*
-    /* it from getting too large also */
+    /* it from getting too large als.homeView .q-progress lio */
 
     .bar-footer {
       overflow: visible !important;
@@ -22,7 +37,7 @@
 
     /* fixes an ios bug bear */
     button.ion-android-send {
-    padding-top: 2px;
+      padding-top: 2px;
     }
 
     /* add this to keep your footer buttons down
@@ -282,13 +297,22 @@
       list-style: none;
       border-radius: 4px;
     }
+
     .q-progress li {
       display: inline-block;
-      height: 4px;
+      height: 7px;
       background: #c0dcdf;
-      width: 3em;
+      width: 5em;
     }
-    .q-pagin {
+    .q-progress li:first-child {
+      border-top-left-radius:7px;
+      border-bottom-left-radius:7px;
+    }
+    .q-progress li:last-child {
+      border-top-right-radius:7px;
+      border-bottom-right-radius:7px;
+      -webkiborder-top-right-radius:7px;
+      border-bottom-right-radius:7px;
 
     }
     .submit .btn-q,

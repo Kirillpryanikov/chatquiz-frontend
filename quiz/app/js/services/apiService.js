@@ -41,21 +41,7 @@
           var endpoint = listId+"/quiz/";
           return $http.get(apiUrl+endpoint);
         }
-        me.setQuizs = function(data,listId){
-          console.log(data,listId);
-          var endpoint = listId+"/quiz/"
-          return $http({
-            method: 'POST',
-            url: apiUrl+endpoint,
-            data: data,
-            transformRequest: function(obj) {
-                var str = [];
-                for(var p in obj)
-                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                return str.join("&");
-            }
-          });
-        }
+
         me.getMockQuizs = function () {
           return [
               {
@@ -65,7 +51,7 @@
             "answers": [
                 {
                     "id": 1,
-                    "text": "risposta a"
+                    "text": "rispostaf a"
                 },
                 {
                     "id": 2,

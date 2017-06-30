@@ -26,5 +26,20 @@
     "moment": "^2.14.1",
     "angular-moment": "^0.10.3",
     "angular-elastic": "^2.5.1"
-  }
+  },
+  "homepage": "https://github.com/Kirillpryanikov/chatquiz-frontend",
+  "authors": [
+    "SergeyVeli4ko <velichkosergej7@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/lib",
+    "test",
+    "tests"
+  ]
 }
