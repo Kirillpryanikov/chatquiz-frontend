@@ -7,12 +7,12 @@
 ```npm install```
 ```npm install -g gulp``` (if needed)
 ```gulp```
-###for dev:
+##for dev:
 ```ionic serve```
-###for deploy:
+##for deploy:
 application will builded, and located at ./www folder
 
-###Important!
+##Important!
 ## there is a constant in the file in file app/app.js
 ```.constant('BaseURL', 'http://192.168.0.110:8080/')```
 change to your server address! and rebuild it ```gulp```
@@ -24,12 +24,12 @@ change to your server address! and rebuild it ```gulp```
 ```npm install```
 ```npm install -g gulp``` (if needed)
 ```gulp```
-###for dev:
+##for dev:
 ```ionic serve```
-###for deploy:
+##for deploy:
 application will builded, and located at ./www folder
 
-###Important!
+##Important!
 ## there is a constant in the file in file app/app.js
 ```.constant('BaseURL', 'http://192.168.0.110:8080/')```
 change to your server address! and rebuild it ```gulp```
