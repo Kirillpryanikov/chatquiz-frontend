@@ -1,7 +1,6 @@
 {
-  "name": "ionicelastichat",
+  "name": "Quiz",
   "version": "1.1.1",
-  "description": "Ionic Magic Chat with Angular Elastic, Autolinker.js and more!",
   "devDependencies": {
     "@ionic/cli-plugin-gulp": "1.0.1",
     "@ionic/cli-plugin-ionic1": "2.0.0",
