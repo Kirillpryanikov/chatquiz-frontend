@@ -22,6 +22,7 @@ angular.module('App', ['ionic', 'btford.socket-io', 'ngAnimate', 'monospaced.ela
     }
   });
 }])
+.constant('BaseURL', 'http://192.168.0.110:8080/')
 .config(['$stateProvider',
          '$urlRouterProvider',
          '$ionicConfigProvider',
@@ -71,6 +72,7 @@ angular.module('App', ['ionic', 'btford.socket-io', 'ngAnimate', 'monospaced.ela
 
     $urlRouterProvider.otherwise('chat');
 }])
+
 .factory('AuthInterceptor', function(StorageService,$q,$location) {
   return {
     request: function(config) {

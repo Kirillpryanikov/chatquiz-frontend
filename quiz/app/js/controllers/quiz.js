@@ -15,7 +15,6 @@
 	    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter, $ionicModal, $q, userData)
 			 {
 				 $scope.logout = function() {
-					 console.log('logOut');
 					 ApiService.logOut();
 				 }
 			}
@@ -29,7 +28,6 @@
 	    $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter, $ionicModal, $q, userData)
 			 {
 				$scope.data = {};
-				console.log(userData);
 				// An alert dialog
 			 $scope.showAlert = function() {
 			   var alertPopup = $ionicPopup.alert({
@@ -47,15 +45,12 @@
 			 };
 			 $scope.login = function(form,data) {
 				 if(form.$valid) {
-					 console.log(data);
 				 	ApiService.login(data)
 					 .then(function(resp) {
-						 console.log(resp);
 							 StorageService.setAuthData(resp.data);
   						 $state.go('quiz');
 					 })
 					 .catch(function(resp){
-						console.log(resp);
 						if (resp.data.hasOwnProperty('password')) {
 							$scope.valid.message = resp.data.password.notMatch;
 						}
@@ -87,15 +82,12 @@
 		var init = function() {
 			ApiService.getQuizs(listId)
 			.then(function(resp){
-				console.log(resp);
 				$scope.quizs = resp.data;
 				//console.log(ApiService.getMockQuizs());
 
 			})
 			.catch(function(resp){
 				$scope.quizs = ApiService.getMockQuizs();
-
-				console.log("mock",$scope.quizs);
 			});
 		}
 		$scope.setQuiz = function(index,option) {
@@ -111,16 +103,10 @@
 					});
 					$scope.quizs[index].answers[option].picked = true;
 
-				// if ($scope.quizs[index+1]) {
-				// 	$scope.goTo(index+1);
-				// }
 			}
-
-			console.log($scope.populateData());
 
 			var i = $scope.getCount();
 			var els = document.getElementsByClassName('q-progress-li');
-			console.log(i);
 			els[i-1].style.background = '#1bbc9b';
 		}
 		$scope.getCount = function () {
@@ -150,8 +136,6 @@
 			$scope.submited = true;
 			$scope.animation = false;
 			ApiService.setQuizs($scope.populateData(),listId);
-			console.log($scope.populateData());
-			console.log($scope.getCount());
 		}
 
 	}

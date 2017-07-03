@@ -3,20 +3,20 @@
 
     angular
         .module('App')
-        .factory('ChatService',['$http', '$q','$window','$state', ChatService])
+        .factory('ChatService',['$http', '$q','$window','$state','BaseURL', ChatService])
         .factory('StorageService', ['$window', StorageService])
-        .factory('SockService', ['StorageService','$http', '$q','$window','$state', SockService]);
+        .factory('SockService', ['StorageService','$http', '$q','$window','$state','BaseURL', SockService]);
 
         //socket
-        function SockService(StorageService,$window,$stateParams) {
+        function SockService(StorageService,$http, $q,$window,$state,BaseURL) {
           var me={};
-          var apiUrl = "http://192.168.0.110:8080/";
+          var apiUrl = BaseURL;
+          console.log(BaseURL);
           var user = StorageService.getAuthData();
           var qr = "'token="+user.token+"'";
           var socketquery = {
             query: "token="+ String(user.token)
           };
-          console.log('query=',socketquery);
 
             me.connect = function () {
                var sock = io.connect(apiUrl, socketquery);
@@ -48,9 +48,9 @@
           return me;
         };
 
-    function ChatService($http, $q,$window,$state) {
+    function ChatService($http, $q,$window,$state,BaseURL) {
         var me = {};
-        var apiUrl = "http://192.168.0.110:8080/";
+        var apiUrl = BaseURL;
 
         me.logOut = function () {
           $window.localStorage['_user'] = false;
@@ -71,16 +71,7 @@
           });
         }
         me.getUserMessages = function (d) {
-            /*
-            var endpoint =
-              'http://www.mocky.io/v2/547cf341501c337f0c9a63fd?callback=JSON_CALLBACK';
-            return $http.jsonp(endpoint).then(function(response) {
-              return response.data;
-            }, function(err) {
-              console.log('get user messages error, err: ' + JSON.stringify(
-                err, null, 2));
-            });
-            */
+
             var deferred = $q.defer();
 
             setTimeout(function () {

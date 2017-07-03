@@ -15,7 +15,6 @@
     $ionicPopup, $ionicScrollDelegate, $timeout, $interval, $ionicActionSheet, $filter, $ionicModal, $q, userData)
 		 {
 			 $scope.logout = function() {
-				 console.log('logOut');
 				 ChatService.logOut();
 			 }
 		}
@@ -49,12 +48,10 @@
 				if(form.$valid) {
 				 ChatService.login(data)
 					.then(function(resp) {
-						console.log(resp);
 							StorageService.setAuthData(resp.data);
 								$state.go('chat',{list:room});
 					})
 					.catch(function(resp){
-					 console.log(resp);
 					 if (resp.data.hasOwnProperty('password')) {
 						 $scope.valid.message = resp.data.password.notMatch;
 					 }
@@ -80,7 +77,6 @@
 
 				var room = $stateParams.list? $stateParams.list : StorageService.getRoom();
 				var msgSocket = SockService.connect();
-				console.log('room in ctrl',room);
 				if(!$scope.messages || $scope.messages === undefined) {
 					$scope.messages = [];
 					$scope.doneLoading = true;
@@ -89,15 +85,11 @@
 				msgSocket.on('connect', function() {
 					msgSocket.emit('room', room);
 					msgSocket.on('message', function(resp) {
-						console.log('response!!!');
 						$scope.messages.push(resp);
-						console.log(resp);
 						$scope.$apply();
 					});
 					msgSocket.on('image', function(resp) {
-						console.log('response!!!');
 						$scope.messages.push(resp);
-						console.log('asdfasdfasdf',$scope.messages);
 						$scope.$apply();
 
 					});
@@ -253,8 +245,6 @@
 		};
 
 		$scope.onMessageHold = function (e, itemIndex, message) {
-			console.log('onMessageHold');
-			console.log('message: ' + JSON.stringify(message, null, 2));
 			$ionicActionSheet.show({
 				buttons: [{
 					text: 'Copy Text'

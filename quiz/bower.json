@@ -16,9 +16,6 @@
     ],
     "moment": [
       "min/*.js"
-    ],
-    "ngCordova": [
-      "dist/ng-cordova.min.js"
     ]
   },
   "dependencies": {
