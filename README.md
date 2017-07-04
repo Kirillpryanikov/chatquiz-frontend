@@ -7,17 +7,8 @@
 ```npm install```
 ```npm install -g gulp``` (if needed)
 ```gulp```
-##for dev:
+###for dev:
 ```ionic serve```
-##for deploy:
-application will builded, and located at ./www folder
-
-##Important!
-## there is a constant in the file in file app/app.js
-```.constant('BaseURL', 'http://192.168.0.110:8080/')```
-change to your server address! and rebuild it ```gulp```
-
-
 
 ## For run chat application:
 ```cd imagechat```
@@ -26,10 +17,12 @@ change to your server address! and rebuild it ```gulp```
 ```gulp```
 ##for dev:
 ```ionic serve```
-##for deploy:
-application will builded, and located at ./www folder
 
-##Important!
-## there is a constant in the file in file app/app.js
-```.constant('BaseURL', 'http://192.168.0.110:8080/')```
-change to your server address! and rebuild it ```gulp```
+#For production
+After gulp command your project placed to www folder in each of applications.
+
+##for production server you need to copy data that stored at these www folders to "dist" folder in backend application.
+
+#####Example:
+dist/quiz (content from quiz/www)
+dist/chat (content from imagechat/www)
