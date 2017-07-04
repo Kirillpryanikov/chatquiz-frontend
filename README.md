@@ -19,10 +19,13 @@
 ```ionic serve```
 
 #For production
+
 After gulp command your project placed to www folder in each of applications.
 
-##for production server you need to copy data that stored at these www folders to "dist" folder in backend application.
+####For production server you need to copy data that stored at these www folders to "dist" folder in backend application.
 
 #####Example:
+
 dist/quiz (content from quiz/www)
+
 dist/chat (content from imagechat/www)
