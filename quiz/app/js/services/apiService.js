@@ -41,26 +41,28 @@
           $state.go('login');
         }
         me.getQuizs = function(listId) {
-          var endpoint = listId+"/quiz/";
+          var endpoint = 'list/'+listId+"/quiz/";
           return $http.get(apiUrl+endpoint);
         }
         me.setQuizs = function(data,listId){
-          console.log(data,listId);
-          var endpoint = listId+"/quiz/"
+          console.log('seе',data,listId);
+          var sdata = JSON.stringify(data);
+          var endpoint = 'list/'+listId+"/quiz-answers/"
           return $http({
             method: 'POST',
             url: apiUrl+endpoint,
-            data: data,
+            data: {answers: data},
             transformRequest: function(obj) {
                 var str = [];
                 for(var p in obj)
-                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(JSON.stringify(obj[p])));
                 return str.join("&");
             }
           });
         }
 
         me.getMockQuizs = function () {
+          console.log('mock');
           return [
               {
             "id": 1,

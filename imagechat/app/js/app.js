@@ -22,6 +22,7 @@ angular.module('App', ['ionic', 'btford.socket-io', 'ngAnimate', 'monospaced.ela
     }
   });
 }])
+//'http://192.168.0.110:8080/'
 .constant('BaseURL', window.location.origin+'/')
 .config(['$stateProvider',
          '$urlRouterProvider',

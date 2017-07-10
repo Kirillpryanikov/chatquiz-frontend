@@ -1,4 +1,5 @@
-<ion-view class="homeView" cache-view="false" hide-back-button="true" view-title="<i class='icon ion-chatbubble user-messages-top-icon'></i><div class='msg-header-username'>Chat room</div>">
+<ion-view class="homeView" cache-view="false" hide-back-button="true"
+view-title="<i class='icon ion-chatbubble user-messages-top-icon'></i>&nbsp;&nbsp;Chat room">
 	<div class="loader-center" ng-if="!doneLoading">
 		<div class="loader">
 			<i class="icon ion-load-c"></i>
@@ -7,12 +8,12 @@
 	<ion-content overflow-scroll="false" has-bouncing="true" class="has-header has-footer" delegate-handle="userMessageScroll"
 		on-scroll="checkScroll()">
 
-		<div ng-repeat="message in messages" class="message-wrapper" ng-init="$last && refreshScroll(user._id === message.from.id)"
+		<div ng-repeat="message in messages" class="message-wrapper" ng-init="$last && refreshScroll(user.id === message.from.id)"
 			on-hold="onMessageHold($event, $index, message)">
 
-			<div ng-if="user._id !== message.from.id">
+			<div ng-if="user.id !== message.from.id">
 
-				<img ng-click="viewProfile(message)" class="profile-pic left" ng-src="{{message.from.avatar}}" onerror="onProfilePicError(this)" />
+				<img ng-click="viewProfile(message)" class="profile-pic left" ng-src="{{message.from.imageUrl}}" onerror="onProfilePicError(this)" />
 
 				<div class="chat-bubble left">
 
@@ -22,27 +23,27 @@
 					</div>
 
 					<div class="message-detail">
-						<span ng-click="viewProfile(message)" class="bold">{{message.from.username}}</span>,
+						<span ng-click="viewProfile(message)" class="bold">{{message.from.firstName}}</span>,
 						<span am-time-ago="message.time"></span>
 					</div>
 
 				</div>
 			</div>
 
-			<div ng-if="user._id === message.from.id" ng-class="message.image ? 'whith-image':''">
+			<div ng-if="user.id === message.from.id" ng-class="message.image ? 'whith-image':''">
 
-				<img class="profile-pic right" ng-src="{{message.from.avatar}}" onerror="onProfilePicError(this)" />
+				<img class="profile-pic right" ng-src="{{message.from.imageUrl}}" onerror="onProfilePicError(this)" />
 
 				<div class="chat-bubble right">
 
 					<img ng-click="photoBrowser(message)" ng-if="message.image" ng-src="{{message.image}}" ng-success="refreshScroll($last)"
 					/>
 
-					<div ng-if="!message.avatar" class="message" ng-bind-html="message.message | nl2br" autolinker>
+					<div ng-if="!message.imageUrl" class="message" ng-bind-html="message.message | nl2br" autolinker>
 					</div>
 
 					<div class="message-detail">
-						<span class="bold">{{message.from.username}}</span>,
+						<span class="bold">{{message.from.firstName}}</span>,
 						<span am-time-ago="message.time"></span>
 					</div>
 

@@ -13,18 +13,13 @@
           var apiUrl = BaseURL;
           console.log(BaseURL);
           var user = StorageService.getAuthData();
-          var qr = "'token="+user.token+"'";
-          var socketquery = {
-            query: "token="+ String(user.token)
-          };
-
+          // var socketquery = {
+          //   query: String(user)
+          // };
             me.connect = function () {
-               var sock = io.connect(apiUrl, socketquery);
-
+               var sock = io.connect(apiUrl);
         	     return sock;
            }
-        //   me.disconnect = function (room) {
-        //  }
 
           return me;
         };

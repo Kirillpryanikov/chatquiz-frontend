@@ -48,15 +48,18 @@
 				if(form.$valid) {
 				 ChatService.login(data)
 					.then(function(resp) {
-							StorageService.setAuthData(resp.data);
+						// console.log('then',resp);
+							StorageService.setAuthData(resp.data.data);
 								$state.go('chat',{list:room});
 					})
 					.catch(function(resp){
-					 if (resp.data.hasOwnProperty('password')) {
-						 $scope.valid.message = resp.data.password.notMatch;
+						// console.log('err',resp);
+
+					 if (resp.data.data.hasOwnProperty('password')) {
+						 $scope.valid.message = resp.data.data.password.notMatch;
 					 }
-					 if (resp.data.hasOwnProperty('message')) {
-						 $scope.valid.message = resp.data.message;
+					 if (resp.data.data.hasOwnProperty('message')) {
+						 $scope.valid.message = resp.data.data.message;
 					 }
 					});
 				} else {
@@ -85,13 +88,13 @@
 				msgSocket.on('connect', function() {
 					msgSocket.emit('room', room);
 					msgSocket.on('message', function(resp) {
+						// console.log('on resp',resp);
 						$scope.messages.push(resp);
 						$scope.$apply();
 					});
 					msgSocket.on('image', function(resp) {
 						$scope.messages.push(resp);
 						$scope.$apply();
-
 					});
 				});
 
@@ -162,6 +165,11 @@
 
 				msg.image = evt.target.result;
 				msg.image_name = file.name;
+				msg.user = {
+					firstName:userData.firstName,
+					id:userData.id,
+					imageUrl:userData.imageUrl
+				}
 				msgSocket.emit('image', msg);
 			};
 			if(msg!=={}){
@@ -172,8 +180,14 @@
 		};
 
 		$scope.sendMessage = function (sendMessageForm) {
+			// console.log(userData);
 			var message = {
-				message: $scope.input.message
+				message: $scope.input.message,
+				user: {
+					firstName:userData.firstName,
+					id:userData.id,
+					imageUrl:userData.imageUrl
+				}
 			};
 
 			// if you do a web service call this will be needed as well as before the viewScroll calls

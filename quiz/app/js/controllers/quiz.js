@@ -47,15 +47,15 @@
 				 if(form.$valid) {
 				 	ApiService.login(data)
 					 .then(function(resp) {
-							 StorageService.setAuthData(resp.data);
+							 StorageService.setAuthData(resp.data.data);
   						 $state.go('quiz');
 					 })
 					 .catch(function(resp){
-						if (resp.data.hasOwnProperty('password')) {
-							$scope.valid.message = resp.data.password.notMatch;
+						if (resp.data.data.hasOwnProperty('password')) {
+							$scope.valid.message = resp.data.data.password.notMatch;
 						}
 						if (resp.data.hasOwnProperty('message')) {
-							$scope.valid.message = resp.data.message;
+							$scope.valid.message = resp.data.data.message;
 						}
 					 });
 				 } else {
@@ -82,8 +82,8 @@
 		var init = function() {
 			ApiService.getQuizs(listId)
 			.then(function(resp){
-				$scope.quizs = resp.data;
-				//console.log(ApiService.getMockQuizs());
+				$scope.quizs = resp.data.data;
+				console.log($scope.quizs);
 
 			})
 			.catch(function(resp){
@@ -92,7 +92,7 @@
 		}
 		$scope.setQuiz = function(index,option) {
 
-			if($scope.quizs[index].multiselect === true) {
+			if($scope.quizs[index].multipleSelect === true) {
 				$scope.quizs[index].answers[option].picked =
 					($scope.quizs[index].answers[option].picked)? false : true;
 			} else {
